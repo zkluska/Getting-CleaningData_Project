@@ -53,80 +53,28 @@ library(dplyr)
  y_test_train_labeled <- mapvalues(y_test_train[,1],from = activity_labels[,1], 
              to = c("walking","walking_upstairs","walking_downstairs","sitting","standing","laying"))
 
- ## Add descriptive activity names to the main (x_test_train) dataset
+ ## Add descriptive activity names (new column) to the main (x_test_train) dataset
  mean_std_test_train_activity <- mutate(mean_std_test_train,Activity=y_test_train_labeled)
 
 ##      4. Appropriately label the data set with descriptive variable names. 
- a <- rename(mean_std_test_train_activity, c("V1" = "tBodyAcc_mean_X"))
- a <- rename(a, c("V2" = "tBodyAcc_mean_Y"))
- a <- rename(a, c("V3" = "tBodyAcc_mean_Z"))
- a <- rename(a, c("V4" = "tBodyAcc_std_X"))
- a <- rename(a, c("V5" = "tBodyAcc_std_Y"))
- a <- rename(a, c("V6" = "tBodyAcc_std_Z"))
- a <- rename(a, c("V41" = "tGravityAcc_mean_X"))
- a <- rename(a, c("V42" = "tGravityAcc_mean_Y"))
- a <- rename(a, c("V43" = "tGravityAcc_mean_Z"))
- a <- rename(a, c("V44" = "tGravityAcc_std_X"))
- a <- rename(a, c("V45" = "tGravityAcc_std_Y"))
- a <- rename(a, c("V46" = "tGravityAcc_std_Z"))
- a <- rename(a, c("V81" = "tBodyAccJerk_mean_X"))
- a <- rename(a, c("V82" = "tBodyAccJerk_mean_Y"))
- a <- rename(a, c("V83" = "tBodyAccJerk_mean_Z"))
- a <- rename(a, c("V84" = "tBodyAccJerk_std_X"))
- a <- rename(a, c("V85" = "tBodyAccJerk_std_Y"))
- a <- rename(a, c("V86" = "tBodyAccJerk_std_Z"))
- a <- rename(a, c("V121" = "tBodyGyro_mean_X"))
- a <- rename(a, c("V122" = "tBodyGyro_mean_Y"))
- a <- rename(a, c("V123" = "tBodyGyro_mean_Z"))
- a <- rename(a, c("V124" = "tBodyGyro_std_X"))
- a <- rename(a, c("V125" = "tBodyGyro_std_Y"))
- a <- rename(a, c("V126" = "tBodyGyro_std_Z"))
- a <- rename(a, c("V161" = "tBodyGyroJerk_mean_X"))
- a <- rename(a, c("V162" = "tBodyGyroJerk_mean_Y"))
- a <- rename(a, c("V163" = "tBodyGyroJerk_mean_Z"))
- a <- rename(a, c("V164" = "tBodyGyroJerk_std_X"))
- a <- rename(a, c("V165" = "tBodyGyroJerk_std_Y"))
- a <- rename(a, c("V166" = "tBodyGyroJerk_std_Z"))
- a <- rename(a, c("V201" = "tBodyAccMag-mean"))
- a <- rename(a, c("V202" = "tBodyAccMag-std"))
- a <- rename(a, c("V214" = "tGravityAccMag-mean"))
- a <- rename(a, c("V215" = "tGravityAccMag-std"))
- a <- rename(a, c("V227" = "tBodyAccJerkMag-mean"))
- a <- rename(a, c("V228" = "tBodyAccJerkMag-std"))
- a <- rename(a, c("V240" = "tBodyGyroMag-mean"))
- a <- rename(a, c("V241" = "tBodyGyroMag-std"))
- a <- rename(a, c("V253" = "tBodyGyroJerkMag_mean"))
- a <- rename(a, c("V254" = "tBodyGyroJerkMag_std"))
- a <- rename(a, c("V266" = "fBodyAcc-mean()-X"))
- a <- rename(a, c("V267" = "fBodyAcc-mean()-Y"))
- a <- rename(a, c("V268" = "fBodyAcc-mean()-Z"))
- a <- rename(a, c("V269" = "fBodyAcc-std()-X"))
- a <- rename(a, c("V270" = "fBodyAcc-std()-Y"))
- a <- rename(a, c("V271" = "fBodyAcc-std()-Z"))
- a <- rename(a, c("V345" = "fBodyAccJerk-mean()-X"))
- a <- rename(a, c("V346" = "fBodyAccJerk-mean()-Y"))
- a <- rename(a, c("V347" = "fBodyAccJerk-mean()-Z"))
- a <- rename(a, c("V348" = "fBodyAccJerk-std()-X"))
- a <- rename(a, c("V349" = "fBodyAccJerk-std()-Y"))
- a <- rename(a, c("V350" = "fBodyAccJerk-std()-Z"))
- a <- rename(a, c("V424" = "fBodyGyro-mean()-X"))
- a <- rename(a, c("V425" = "fBodyGyro-mean()-Y"))
- a <- rename(a, c("V426" = "fBodyGyro-mean()-Z"))
- a <- rename(a, c("V427" = "fBodyGyro-std()-X"))
- a <- rename(a, c("V428" = "fBodyGyro-std()-Y"))
- a <- rename(a, c("V429" = "fBodyGyro-std()-Z"))
- a <- rename(a, c("V503" = "fBodyAccMag-mean()"))
- a <- rename(a, c("V504" = "fBodyAccMag-std()"))
- a <- rename(a, c("V516" = "fBodyBodyAccJerkMag-mean()"))
- a <- rename(a, c("V517" = "fBodyBodyAccJerkMag-std()"))
- a <- rename(a, c("V529" = "fBodyBodyGyroMag-mean()"))
- a <- rename(a, c("V530" = "fBodyBodyGyroMag-std()"))
- a <- rename(a, c("V542" = "fBodyBodyGyroJerkMag-mean()"))
- a <- rename(a, c("V543" = "fBodyBodyGyroJerkMag-std()"))
-mean_std_test_train_activity_labeled <- a 
-
+ names(mean_std_test_train_activity) <- mean_std_col_labels_sorted$V2
+ names(mean_std_test_train_activity)[67] <- "Activity"   ## had to re-label the Activity Type column as was overrode w/ "NA" by previous line
 
 ##      5. From the data set in step 4, creates a second, independent tidy data set with the 
 ##      average of each variable for each activity and each subject.
+ ## Merge the training and test SUBJECT datasets to create one data set
+ subject_train <- read.table("UCI HAR Dataset/train/subject_train.txt")
+ subject_test <- read.table("UCI HAR Dataset/test/subject_test.txt")
+ subject_test_train <-rbind(subject_test,subject_train)        
 
+ ## Add a Subject identifier column to the main (mean_std_test_train_activity) dataset
+ mean_std_test_train_activity <- mutate(mean_std_test_train_activity,Subject=subject_test_train[,1])
 
+ ##Group the dataset by Subject & Activity
+ Grouped <-group_by(mean_std_test_train_activity,Subject,Activity)
+
+ ##Calculate the Mean of every variable (but the 2 being grouped_by) per the groupings
+ Grouped_Mean <- summarise_each(Grouped,funs(mean))
+
+ ##Write the Tidy dataset
+ write.table(Grouped_Mean, file = "Tidy_Data.txt", row.name=FALSE)
