@@ -1,6 +1,53 @@
 CodeBook.md
 
-The following originated from the documentation associated w/ data analyzed from this website:
+2 sections here:
+1) Data Transforamtion Steps: (also included as comments in-line code (run_analysis.R)
+2) Column/Data Descriptions: A subset of below described columns are in the Tidy Data Set, specifically the MEAN() of every variable, by Subject, by Activity.
+-----------------------------------------------------------
+
+1) Data Tranformation Steps:
+
+## Download and extract raw dataset
+##      1. Merges the training and the test sets to create one data set.
+##      2. Extracts only the measurements on the mean and standard deviation for each measurement.
+ ## First get the correct Features (columns) from the merged dataset
+ ## read in column labels
+ ## isolate column labels for "mean()" features
+ ## isolate column labels for "std()" features
+ ## merge the two label data sets
+ ## sort the merged label data set
+
+ ## Select only those columns from merged data set corresponding to mean() or std() labels
+ 
+
+##      3. Uses descriptive activity names to name the activities in the data set
+ ## Merge the two Activity data sets into one
+ 
+ ## Replace  Activity values with descriptive activity names
+ 
+ ## Add descriptive activity names (new column) to the main (x_test_train) dataset
+ 
+##      4. Appropriately label the data set with descriptive variable names. 
+ ## had to re-label the Activity Type column as was overrode w/ "NA" by previous line
+
+##      5. From the data set in step 4, creates a second, independent tidy data set with the 
+##      average of each variable for each activity and each subject.
+ ## Merge the training and test SUBJECT datasets to create one data set
+ 
+ ## Add a Subject identifier column to the main (mean_std_test_train_activity) dataset
+ 
+ ##Group the dataset by Subject & Activity
+ 
+ ##Calculate the Mean of every variable (but the 2 being grouped_by) per the groupings
+ 
+ ##Write the Tidy dataset
+
+------------------------------------------------------------------------
+2) Column/Data Descriptions
+
+A subset of below described columns are in the Tidy Data Set, specifically the MEAN() of every variable, by Subject, by Activity.
+
+The below  originated from the documentation associated w/ data analyzed from this website:
 http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones
 
 Feature Selection 
